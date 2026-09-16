@@ -1,7 +1,9 @@
 /target
 .env
+.DS_Store
+**/.DS_Store
 config.toml
 signatures_cache.json
 detections.json
 *.pcap
-sample.pcap
+sample.pcapf

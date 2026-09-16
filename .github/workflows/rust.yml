@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Pin toolchain to 1.75.0
+      uses: dtolnay/rust-toolchain@1.75.0
     - name: Build
       run: cargo build --verbose
     - name: Run tests

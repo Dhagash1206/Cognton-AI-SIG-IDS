@@ -10,7 +10,7 @@ pcap-file = "2.0"
 # ethernet/ip/tcp/udp header parsing from raw bytes
 etherparse = "0.14"
 # AbuseIPDB HTTP calls (lightweight blocking client, no tokio runtime)
-ureq = { version = "2.9", features = ["json", "tls"] }
+ureq = { version = "2.9", default-features = false, features = ["json", "gzip", "native-tls"] }
 native-tls = "0.2"
 # pinned: newer openssl-rs / openssl-sys require rustc 1.80+, this env has 1.75
 openssl = "=0.10.64"
@@ -27,4 +27,3 @@ chrono = { version = "0.4", features = ["serde"] }
 # pinned: newer idna/icu (pulled transitively) requires edition2024,
 # unsupported by the apt-installed rustc 1.75 toolchain in this environment
 url = "=2.4.1"
-
