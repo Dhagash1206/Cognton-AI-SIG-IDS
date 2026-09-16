@@ -1,6 +1,7 @@
 use crate::types::{IocKind, Signature};
 use anyhow::{bail, Context, Result};
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -8,6 +9,10 @@ use std::time::{SystemTime, UNIX_EPOCH};
 const CACHE_PATH: &str = "signatures_cache.json";
 const CACHE_TTL_SECS: u64 = 3600; // 1 hour — don't hit the API per-packet
 const ABUSEIPDB_BLACKLIST_URL: &str = "https://api.abuseipdb.com/api/v2/blacklist";
+const URLHAUS_CSV_URL: &str = "https://urlhaus.abuse.ch/downloads/csv_recent/";
+/// URLhaus has no per-IOC score; keep this below the Malicious cutoff so
+/// domain/URL hits can still land as Suspicious.
+const URLHAUS_CONFIDENCE: u8 = 60;
 
 /// On-disk cache format: signatures plus the unix timestamp they were fetched at.
 #[derive(Serialize, Deserialize)]
@@ -46,7 +51,8 @@ pub fn load_signatures() -> Result<Vec<Signature>> {
         return Ok(cached);
     }
 
-    let fresh = fetch_from_abuseipdb()?;
+    let mut fresh = fetch_from_abuseipdb()?;
+    fresh.extend(fetch_from_urlhaus()?);
     save_to_cache(CACHE_PATH, &fresh)?;
     Ok(fresh)
 }
@@ -90,6 +96,95 @@ fn fetch_from_abuseipdb() -> Result<Vec<Signature>> {
             confidence: entry.abuse_confidence_score,
         })
         .collect())
+}
+
+/// Downloads abuse.ch URLhaus recent URLs and turns each into URL + domain
+/// signatures, then merges with the rest of the set via the caller.
+fn fetch_from_urlhaus() -> Result<Vec<Signature>> {
+    let response = ureq::get(URLHAUS_CSV_URL)
+        .set("Accept", "text/csv")
+        .timeout(std::time::Duration::from_secs(60))
+        .call();
+
+    let response = match response {
+        Ok(r) => r,
+        Err(ureq::Error::Status(code, r)) => {
+            bail!(
+                "URLhaus returned HTTP {}: {}",
+                code,
+                r.into_string().unwrap_or_default()
+            )
+        }
+        Err(e) => bail!("URLhaus request failed: {e}"),
+    };
+
+    let body = response
+        .into_string()
+        .context("reading URLhaus CSV body")?;
+
+    Ok(parse_urlhaus_csv(&body))
+}
+
+fn parse_urlhaus_csv(body: &str) -> Vec<Signature> {
+    let mut signatures = Vec::new();
+    let mut seen_urls = HashSet::new();
+    let mut seen_domains = HashSet::new();
+
+    for line in body.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+
+        let fields = parse_csv_line(line);
+        let Some(raw_url) = fields.get(2).map(|s| s.trim()).filter(|s| !s.is_empty()) else {
+            continue;
+        };
+
+        if seen_urls.insert(raw_url.to_string()) {
+            signatures.push(Signature {
+                indicator: raw_url.to_string(),
+                kind: IocKind::Url,
+                source: "URLhaus".to_string(),
+                confidence: URLHAUS_CONFIDENCE,
+            });
+        }
+
+        if let Ok(parsed) = url::Url::parse(raw_url) {
+            if let Some(host) = parsed.host_str() {
+                let host = host.trim_end_matches('.').to_ascii_lowercase();
+                if !host.is_empty() && seen_domains.insert(host.clone()) {
+                    signatures.push(Signature {
+                        indicator: host,
+                        kind: IocKind::Domain,
+                        source: "URLhaus".to_string(),
+                        confidence: URLHAUS_CONFIDENCE,
+                    });
+                }
+            }
+        }
+    }
+
+    signatures
+}
+
+fn parse_csv_line(line: &str) -> Vec<String> {
+    let mut fields = Vec::new();
+    let mut current = String::new();
+    let mut in_quotes = false;
+
+    for c in line.chars() {
+        match c {
+            '"' => in_quotes = !in_quotes,
+            ',' if !in_quotes => {
+                fields.push(std::mem::take(&mut current));
+            }
+            _ => current.push(c),
+        }
+    }
+
+    fields.push(current);
+    fields
 }
 
 /// Returns Some(signatures) if the cache file exists and is younger than

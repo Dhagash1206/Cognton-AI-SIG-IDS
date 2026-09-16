@@ -16,14 +16,14 @@
     {
       "indicator": "malware.test",
       "kind": "Domain",
-      "source": "Offline URL fixture",
-      "confidence": 95
+      "source": "URLhaus (offline fixture)",
+      "confidence": 60
     },
     {
       "indicator": "http://malware.test/payload",
       "kind": "Url",
-      "source": "Offline URL fixture",
-      "confidence": 95
+      "source": "URLhaus (offline fixture)",
+      "confidence": 60
     }
   ]
 }

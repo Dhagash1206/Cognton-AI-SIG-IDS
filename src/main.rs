@@ -1,3 +1,4 @@
+mod aggregate;
 mod classifier;
 mod detector;
 mod ingestion;
@@ -24,9 +25,9 @@ struct Args {
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    // Pipeline: ingest -> load signatures -> match each flow -> classify -> report
-    let flows = ingestion::read_pcap(&args.pcap)?;
-    let signatures = signatures::load_signatures()?;
+    // Pipeline: ingest -> aggregate connections -> load signatures -> match -> classify -> report
+    let flows = aggregate::aggregate(ingestion::read_pcap(&args.pcap)?);
+    let signatures = detector::SignatureIndex::from_signatures(signatures::load_signatures()?);
 
     let detections: Vec<_> = flows
         .into_iter()
