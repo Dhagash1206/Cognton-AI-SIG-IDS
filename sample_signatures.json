@@ -1,0 +1,29 @@
+{
+  "fetched_at": 0,
+  "signatures": [
+    {
+      "indicator": "1.2.3.4",
+      "kind": "Ip",
+      "source": "AbuseIPDB (offline fixture)",
+      "confidence": 95
+    },
+    {
+      "indicator": "45.155.205.233",
+      "kind": "Ip",
+      "source": "AbuseIPDB (offline fixture)",
+      "confidence": 88
+    },
+    {
+      "indicator": "malware.test",
+      "kind": "Domain",
+      "source": "Offline URL fixture",
+      "confidence": 95
+    },
+    {
+      "indicator": "http://malware.test/payload",
+      "kind": "Url",
+      "source": "Offline URL fixture",
+      "confidence": 95
+    }
+  ]
+}

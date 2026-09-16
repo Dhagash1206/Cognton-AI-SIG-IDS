@@ -1,0 +1,30 @@
+[package]
+name = "Cognton-AI-SIG-IDS"
+version = "0.1.0"
+edition = "2021"
+default-run = "Cognton-AI-SIG-IDS"
+
+[dependencies]
+# pcap file parsing (reads .pcap, no root needed)
+pcap-file = "2.0"
+# ethernet/ip/tcp/udp header parsing from raw bytes
+etherparse = "0.14"
+# AbuseIPDB HTTP calls (lightweight blocking client, no tokio runtime)
+ureq = { version = "2.9", features = ["json", "tls"] }
+native-tls = "0.2"
+# pinned: newer openssl-rs / openssl-sys require rustc 1.80+, this env has 1.75
+openssl = "=0.10.64"
+openssl-sys = "=0.9.102"
+# serialization for cache + JSON export
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# CLI argument parsing
+clap = { version = "=4.4.18", features = ["derive"] }
+# ergonomic error handling
+anyhow = "1.0"
+# timestamps for cache freshness
+chrono = { version = "0.4", features = ["serde"] }
+# pinned: newer idna/icu (pulled transitively) requires edition2024,
+# unsupported by the apt-installed rustc 1.75 toolchain in this environment
+url = "=2.4.1"
+

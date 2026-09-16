@@ -1,0 +1,7 @@
+/target
+.env
+config.toml
+signatures_cache.json
+detections.json
+*.pcap
+sample.pcap
