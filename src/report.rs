@@ -1,3 +1,6 @@
+/// Prints summary counts and exports detections as JSON
+
+
 use crate::types::{Detection, Verdict};
 use anyhow::Result;
 use std::fs::File;

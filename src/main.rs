@@ -1,3 +1,7 @@
+/// Parses CLI arguments, runs the full detection pipeline
+
+
+
 mod aggregate;
 mod classifier;
 mod detector;

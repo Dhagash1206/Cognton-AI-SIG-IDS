@@ -1,0 +1,108 @@
+[
+  {
+    "flow": {
+      "src_ip": "10.0.0.5",
+      "dst_ip": "1.2.3.4",
+      "src_port": 51234,
+      "dst_port": 80,
+      "protocol": "TCP",
+      "hostname": "malware.test",
+      "url": "http://malware.test/payload"
+    },
+    "verdict": "Malicious",
+    "matched_signature": {
+      "indicator": "1.2.3.4",
+      "kind": "Ip",
+      "source": "AbuseIPDB (offline fixture)",
+      "confidence": 95
+    }
+  },
+  {
+    "flow": {
+      "src_ip": "10.0.0.5",
+      "dst_ip": "45.155.205.233",
+      "src_port": 51235,
+      "dst_port": 80,
+      "protocol": "TCP",
+      "hostname": "unknown.test",
+      "url": "http://unknown.test/"
+    },
+    "verdict": "Malicious",
+    "matched_signature": {
+      "indicator": "45.155.205.233",
+      "kind": "Ip",
+      "source": "AbuseIPDB (offline fixture)",
+      "confidence": 88
+    }
+  },
+  {
+    "flow": {
+      "src_ip": "10.0.0.6",
+      "dst_ip": "93.184.216.34",
+      "src_port": 51236,
+      "dst_port": 80,
+      "protocol": "TCP",
+      "hostname": "malware.test",
+      "url": "http://malware.test/payload"
+    },
+    "verdict": "Malicious",
+    "matched_signature": {
+      "indicator": "malware.test",
+      "kind": "Domain",
+      "source": "Offline URL fixture",
+      "confidence": 95
+    }
+  },
+  {
+    "flow": {
+      "src_ip": "10.0.0.7",
+      "dst_ip": "8.8.8.8",
+      "src_port": 51237,
+      "dst_port": 80,
+      "protocol": "TCP",
+      "hostname": "example.com",
+      "url": "http://example.com/"
+    },
+    "verdict": "Benign",
+    "matched_signature": null
+  },
+  {
+    "flow": {
+      "src_ip": "10.0.0.8",
+      "dst_ip": "1.1.1.1",
+      "src_port": 51238,
+      "dst_port": 80,
+      "protocol": "TCP",
+      "hostname": "example.org",
+      "url": "http://example.org/docs"
+    },
+    "verdict": "Benign",
+    "matched_signature": null
+  },
+  {
+    "flow": {
+      "src_ip": "10.0.0.9",
+      "dst_ip": "9.9.9.9",
+      "src_port": 51239,
+      "dst_port": 443,
+      "protocol": "TCP",
+      "hostname": "rust-lang.org",
+      "url": "https://rust-lang.org/"
+    },
+    "verdict": "Benign",
+    "matched_signature": null
+  },
+  {
+    "flow": {
+      "src_ip": "10.0.0.10",
+      "dst_ip": "142.250.72.14",
+      "src_port": 51240,
+      "dst_port": 80,
+      "protocol": "TCP",
+      "hostname": "google.com",
+      "url": "http://google.com/"
+    },
+    "verdict": "Benign",
+    "matched_signature": null
+  }
+]

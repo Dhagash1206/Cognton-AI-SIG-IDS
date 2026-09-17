@@ -1,3 +1,7 @@
+/// Defines shared structs and enums used everywhere else.
+
+
+
 use serde::{Deserialize, Serialize};
 use std::net::IpAddr;
 

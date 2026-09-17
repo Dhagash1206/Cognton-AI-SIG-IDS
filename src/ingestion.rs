@@ -1,3 +1,6 @@
+/// Parses raw pcap bytes into structured packet records.
+
+
 use crate::types::Flow;
 use anyhow::{Context, Result};
 use etherparse::{NetSlice, SlicedPacket, TransportSlice};

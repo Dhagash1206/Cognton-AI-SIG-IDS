@@ -4,6 +4,4 @@
 **/.DS_Store
 config.toml
 signatures_cache.json
-detections.json
 *.pcap
-sample.pcapf

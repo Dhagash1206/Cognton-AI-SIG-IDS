@@ -1,3 +1,6 @@
+/// Matches flow data against known malicious signatures list
+
+
 use crate::types::{Flow, IocKind, Signature};
 use std::collections::{HashMap, HashSet};
 use std::net::IpAddr;

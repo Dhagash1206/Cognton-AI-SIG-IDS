@@ -1,3 +1,7 @@
+/// Assigns Benign, Suspicious, or Malicious verdict per flow
+
+
+
 use crate::types::{Detection, Flow, Signature, Verdict};
 
 /// AbuseIPDB's blacklist is filtered at confidence >= 90, so a cutoff of 75
