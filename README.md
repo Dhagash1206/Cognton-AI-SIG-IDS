@@ -121,3 +121,15 @@ AbuseIPDB IP blacklist (`/v2/blacklist`), free tier: 1,000 checks/day.
   `ureq`/`native-tls`, and `openssl`, `openssl-sys`, `clap`, and `url` are
   version-pinned in `Cargo.toml` to avoid transitive dependencies that
   require edition2024
+## Output
+
+<img width="700" height="508" alt="image" src="https://github.com/user-attachments/assets/77d56f38-de86-44ea-b20d-66676aa80949" />
+<img width="313" height="505" alt="image" src="https://github.com/user-attachments/assets/b8f30bb4-5b4f-47ff-bad4-f10349f05a1b" />
+
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for the full license text.
+
+
+
