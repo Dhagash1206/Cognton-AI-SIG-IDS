@@ -29,6 +29,49 @@ on Cognton's agentic platform.
 
 ## Architecture
 
+
+```
+                    ┌─────────────────┐
+                    │  CLI (clap)     │
+                    │  --pcap --offline│
+                    └────────┬────────┘
+                             │
+                             ▼
+                    ┌─────────────────┐
+         saved      │  extract.rs     │
+         .pcap ───► │  decode L3/L4   │
+                    │  aggregate flows│
+                    │  DNS/HTTP enrich│
+                    └────────┬────────┘
+                             │ unique 5-tuples + host/URL
+                             ▼
+              ┌──────────────┴──────────────┐
+              │                             │
+              ▼                             ▼
+     ┌────────────────┐            ┌─────────────────┐
+     │ data/iocs.json │            │ intel.rs        │
+     │ local IOCs     │            │ --offline: skip │
+     └───────┬────────┘            │ online: cache → │
+             │                     │ ThreatFox search│
+             │                     │ cache/ti_cache  │
+             │                     └────────┬────────┘
+             └──────────────┬───────────────┘
+                            ▼
+                   ┌─────────────────┐
+                   │  detect.rs      │
+                   │  IP / domain /  │
+                   │  URL match      │
+                   │  verdict+action │
+                   └────────┬────────┘
+                            ▼
+                   ┌─────────────────┐
+                   │  report.rs      │
+                   │  CLI summary    │
+                   │  JSON export    │
+                   └─────────────────┘
+```
+
+
 | Module          | Responsibility                                                        |
 | --------------- | --------------------------------------------------------------------- |
 | `types.rs`      | Shared structs and enums: `Flow`, `Signature`, `Verdict`, `Detection` |
