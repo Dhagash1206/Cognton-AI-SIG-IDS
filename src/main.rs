@@ -1,6 +1,8 @@
 /// Parses CLI arguments, runs the full detection pipeline
-
-
+/// routing , define project , 
+// Pipeline: ingest -> aggregate connections -> 
+//  - > load signatures -> match -> classify -> report
+// Pipeline controller → controls the order of operations.
 
 mod aggregate;
 mod classifier;

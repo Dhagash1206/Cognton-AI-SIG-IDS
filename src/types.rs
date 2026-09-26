@@ -1,4 +1,4 @@
-/// Defines shared structs and enums used everywhere else.
+/// Defines shared structures (Flow , enum verdict , Struct Signature ) 
 
 
 

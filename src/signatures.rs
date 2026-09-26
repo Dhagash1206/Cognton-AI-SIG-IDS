@@ -1,5 +1,5 @@
 /// Fetches and caches malicious IPs from AbuseIPDB API.
-
+/// API requester and fetcher
 
 
 use crate::types::{IocKind, Signature};
@@ -46,6 +46,12 @@ struct AbuseIpdbEntry {
 /// call entirely and loads from a bundled `sample_signatures.json` instead.
 /// This is NOT part of the graded pipeline — it exists so the tool can be
 /// demoed/tested in environments without outbound access to AbuseIPDB.
+
+
+
+
+/// First checks offline mode → then cache → otherwise downloads fresh signatures
+/// Combines AbuseIPDB + URLhaus data.
 pub fn load_signatures() -> Result<Vec<Signature>> {
     if std::env::var("SIG_IDS_OFFLINE").as_deref() == Ok("1") {
         return load_offline_fixture();
@@ -61,9 +67,7 @@ pub fn load_signatures() -> Result<Vec<Signature>> {
     Ok(fresh)
 }
 
-/// Calls AbuseIPDB's blacklist endpoint (IPs with confidence >= 90) and
-/// converts the response into our internal Signature type.
-/// API key is read from the ABUSEIPDB_API_KEY env var — never hardcoded.
+/// Calls AbuseIPDB's blacklist endpoint (IPs with confidence >= 90)
 fn fetch_from_abuseipdb() -> Result<Vec<Signature>> {
     let api_key = std::env::var("ABUSEIPDB_API_KEY")
         .context("ABUSEIPDB_API_KEY env var not set — export it before running")?;

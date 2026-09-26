@@ -1,5 +1,6 @@
 /// Matches flow data against known malicious signatures list
-
+/// main logic block 
+/// first converting Signature Packages to hashMap , for avg O(1) lookup
 
 use crate::types::{Flow, IocKind, Signature};
 use std::collections::{HashMap, HashSet};
@@ -13,6 +14,7 @@ pub struct SignatureIndex {
     by_kind: HashMap<IocKind, HashMap<String, Signature>>,
 }
 
+/// HashMap 
 impl SignatureIndex {
     pub fn from_signatures(signatures: Vec<Signature>) -> Self {
         let mut ips = HashSet::new();

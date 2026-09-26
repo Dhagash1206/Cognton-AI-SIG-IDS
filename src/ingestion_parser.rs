@@ -1,4 +1,5 @@
 /// Parses raw pcap bytes into structured packet records.
+/// converts 
 
 
 use crate::types::Flow;
@@ -196,7 +197,6 @@ fn parse_handshake_sni(data: &[u8]) -> Option<String> {
     let hello_end = (4 + hello_len).min(data.len());
     parse_client_hello_sni(&data[4..hello_end])
 }
-
 fn parse_client_hello_sni(hello: &[u8]) -> Option<String> {
     // version (2) + random (32)
     if hello.len() < 34 {
